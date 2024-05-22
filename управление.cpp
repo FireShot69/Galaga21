@@ -1,4 +1,4 @@
-﻿#include <Windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -88,61 +88,47 @@ int main()
     char direction;
     
  
-
-   
+    int shipX = 20, shipY = 20;
+    const int ShipSpeed = 2;
+    
 
     int x = 0;
 
     while (true) {
         system("cls");
-
+        
+        move_cursor(shipX, shipY);
+            cout << "       |       " << endl;
+            move_cursor(shipX, shipY+1);
+            cout << "|      |      |" << endl;
+            move_cursor(shipX, shipY+2);
+            cout << "|------|------|" << endl;
+            move_cursor(shipX, shipY+3);
+            cout << "|------|------|" << endl;
+            move_cursor(shipX, shipY+4);
+            cout << "|             |" << endl;
+        
+        
         if (_kbhit()) { //проверяем клавишу
-            cout << setw(20) << "             |     " << endl;
-            cout << setw(16) << "|      |      |" << endl;
-            cout << setw(16) << "|------|------|" << endl;
-            cout << setw(16) << "|------|------|" << endl;
-            cout << setw(16) << "|             |" << endl;
-
-            cin >> direction;
+            
             direction = _getch();
             
             if (direction == 'a') {
 
-                cout << setw(20-1) << "             |     " << endl;
-                cout << setw(16-1) << "|      |      |" << endl;
-                cout << setw(16-1) << "|------|------|" << endl;
-                cout << setw(16-1) << "|------|------|" << endl;
-                cout << setw(16-1) << "|             |" << endl;
-
-
+            shipX = max(shipX - ShipSpeed, 0);
+            
             }
+            
             else if (direction == 'd') {
 
-                x += 1;
-
-                cout << x << endl;
+            shipX = min(shipX + ShipSpeed, vis - 4);
 
             }
+          
         }
+        
+        Sleep(50);  
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
