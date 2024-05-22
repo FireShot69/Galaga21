@@ -85,10 +85,9 @@ int main()
     move_cursor((vis - 29) / 2, shr - 1);
     
     
-    char direction;
-    
  
-    int shipX = 20, shipY = 20;
+    int shipX = 20, 
+    int shipY = 20;
     const int ShipSpeed = 2;
     
 
@@ -111,17 +110,17 @@ int main()
         
         if (_kbhit()) { //проверяем клавишу
             
-            direction = _getch();
+            char direction = _getch();
             
             if (direction == 'a') {
 
-            shipX = max(shipX - ShipSpeed, 0);
+            shipX = max(shipX - ShipSpeed, 0);//влево
             
             }
             
             else if (direction == 'd') {
-
-            shipX = min(shipX + ShipSpeed, vis - 4);
+                shipX = min(shipX + ShipSpeed, vis - SizeShipX - 1);//вправо
+                }
 
             }
           
