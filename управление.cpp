@@ -62,14 +62,26 @@ int main()
  //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
     
-    struct ship {
-        int hp = 100;
-    };
-    
-    struct enemies_ship {
-        int hp = 30;
-        int attack = 10;
-    };
+    void drawship (Ship, ship {
+        move_cursor(Ship.shipX, Ship.shipY);
+        cout << "       |       " << endl;
+        move_cursor(Ship.shipX, Ship.shipY+1);
+        cout << "|      |      |" << endl;
+        move_cursor(Ship.shipX, Ship.shipY+2);
+        cout << "|------|------|" << endl;
+        move_cursor(Ship.shipX, Ship.shipY+3);
+        cout << "|------|------|" << endl;
+        move_cursor(Ship.shipX, Ship.shipY+4);
+        cout << "|             |" << endl;
+    }
+    void moveShip (Ship& ship, char direction) {
+        if (direction == 'a') {
+            Ship.shipX -= ShipSpeed;
+        }
+        else if (direction == 'd') {
+            Ship.shipX += ShipSpeed;
+        }
+    }
     struct Bullets_ship {
         const int MaxBullets = 25;
         int attack = 10;
@@ -95,36 +107,17 @@ int main()
 
     while (true) {
         system("cls");
-        
-        move_cursor(shipX, shipY);
-            cout << "       |       " << endl;
-            move_cursor(shipX, shipY+1);
-            cout << "|      |      |" << endl;
-            move_cursor(shipX, shipY+2);
-            cout << "|------|------|" << endl;
-            move_cursor(shipX, shipY+3);
-            cout << "|------|------|" << endl;
-            move_cursor(shipX, shipY+4);
-            cout << "|             |" << endl;
-        
+        drawship(ship);
+         
         
         if (_kbhit()) { //проверяем клавишу
             
             char direction = _getch();
             
-            if (direction == 'a') {
-
-            shipX = max(shipX - ShipSpeed, 0);//влево
-            
-            }
-            
-            else if (direction == 'd') {
-                shipX = min(shipX + ShipSpeed, vis - SizeShipX - 1);//вправо
-                }
-
+            moveShip (ship, direction)
             }
           
-        }
+        
         
         Sleep(50);  
     }
