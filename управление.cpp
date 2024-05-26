@@ -114,7 +114,7 @@ int main()
             
             char direction = _getch();
             
-            moveShip (ship, direction)
+            moveShip (ship, direction);
             }
           
         
