@@ -9,7 +9,7 @@
 #include <conio.h>
 #include <exception>
 
-#include "управление.h"
+
 using namespace std;
 void move_cursor(int x, int y);
 void kinder(int x, int y);
@@ -35,6 +35,12 @@ void kinder(int x, int y)
     x = 0;
     y = 0;
 }
+
+struct bullet {
+    int x;
+    int y;
+};
+
 int main()
 {
     int vis = 50, shr = 45;
@@ -64,45 +70,53 @@ int main()
     //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
 
-    while (true) {
-
         // Позиция объекта
         int x = 20, y = 45;
-        int x1 = 20, y1 = 40;
+        bullet *pulka = new bullet{ x, y };
+
+
+        /*int * bullet_count = new int{ 1 };
+        bullet* bullets = new bullet[*bullet_count]{};*/
+
+        char laser = '|';
         // Основной цикл
         while (true)
         {
             // Очистка экрана
             system("cls");
+            
+            if (GetAsyncKeyState(VK_UP))
+            {
+                cout << string(pulka->y++, '\n') << string(pulka -> x, ' ') << laser << endl;
+            }
+                /*{
+                
+                bullets[*(bullet_count)-1] = *pulka;
+
+            }
+            for (size_t i = 0; i < *bullet_count; i++)
+            {
+                cout << string(bullets[i].y, '\n') << string(bullets[i].x, ' ') << laser << endl;
+            }*/
+
 
             // Отрисовка объекта
+            cout << string(y--, '\n') << string(x, ' ') << "|>-0-<|" << endl;
             
-            
-            
-
-           cout << string(y, '\n') << string(x, ' ') << "|>-|-<|" << endl;
-            cout << string(y1, '\n') << string(x1, ' ') << "x-=()=-x" << endl;
-            while (x1 != 0) {
-                x1++;
-                Sleep(10);
-            }
             // Обработка нажатий на стрелки
-
             if (GetAsyncKeyState(VK_LEFT))
                 if (x != 0)
-                    x--;
+                x--;
             if (GetAsyncKeyState(VK_RIGHT))
                 if (x != 43)
-                    x++;
-
+                x++;
+            
             
             // Задержка
-            Sleep(40);
-
-            
-               
+            Sleep(500);
         }
+
+        return 0;
     }
 
-    return 0;
-}
+
