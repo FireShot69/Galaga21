@@ -8,6 +8,8 @@
 #include <ctime>
 #include <conio.h>
 #include <exception>
+
+#include "управление.h"
 using namespace std;
 void move_cursor(int x, int y);
 void kinder(int x, int y);
@@ -58,72 +60,49 @@ int main()
             new_game = true;
         }
     }
-    
- //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
-    
-    void drawship (Ship, ship {
-        move_cursor(Ship.shipX, Ship.shipY);
-        cout << "       |       " << endl;
-        move_cursor(Ship.shipX, Ship.shipY+1);
-        cout << "|      |      |" << endl;
-        move_cursor(Ship.shipX, Ship.shipY+2);
-        cout << "|------|------|" << endl;
-        move_cursor(Ship.shipX, Ship.shipY+3);
-        cout << "|------|------|" << endl;
-        move_cursor(Ship.shipX, Ship.shipY+4);
-        cout << "|             |" << endl;
-    }
-    void moveShip (Ship& ship, char direction) {
-        if (direction == 'a') {
-            Ship.shipX -= ShipSpeed;
-        }
-        else if (direction == 'd') {
-            Ship.shipX += ShipSpeed;
-        }
-    }
-    struct Bullets_ship {
-        const int MaxBullets = 25;
-        int attack = 10;
-    };
-    
 
-    resize_console(vis - 1, shr);
-    for (int n = 0; n < (shr / 2 - 1) - 4; n++)
-    {
-        cout << "\n";
-    }
-    cout << setw(vis / 2 + 2) << "\n";
-    move_cursor((vis - 29) / 2, shr - 1);
-    
-    
- 
-    int shipX = 20, 
-    int shipY = 20;
-    const int ShipSpeed = 2;
-    
-
-    int x = 0;
+    //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
 
     while (true) {
-        system("cls");
-        drawship(ship);
-         
-        
-        if (_kbhit()) { //проверяем клавишу
+
+        // Позиция объекта
+        int x = 20, y = 45;
+        int x1 = 20, y1 = 40;
+        // Основной цикл
+        while (true)
+        {
+            // Очистка экрана
+            system("cls");
+
+            // Отрисовка объекта
             
-            char direction = _getch();
             
-            moveShip (ship, direction);
+            
+
+           cout << string(y, '\n') << string(x, ' ') << "|>-|-<|" << endl;
+            cout << string(y1, '\n') << string(x1, ' ') << "x-=()=-x" << endl;
+            while (x1 != 0) {
+                x1++;
+                Sleep(10);
             }
-          
-        
-        
-        Sleep(50);  
+            // Обработка нажатий на стрелки
+
+            if (GetAsyncKeyState(VK_LEFT))
+                if (x != 0)
+                    x--;
+            if (GetAsyncKeyState(VK_RIGHT))
+                if (x != 43)
+                    x++;
+
+            
+            // Задержка
+            Sleep(40);
+
+            
+               
+        }
     }
 
-
-
-
-return 0;
+    return 0;
 }
