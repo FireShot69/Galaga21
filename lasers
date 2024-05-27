@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cmath>
+
+// Параметры лазера
+const int LASER_LENGTH = 20;
+const int LASER_WIDTH = 2;
+const char LASER_SYMBOL = '#';
+
+// Положение предмета
+int objectX = 10, objectY = 10;
+
+// Функция для рисования лазера
+void drawLaser() {
+    for (int y = objectY - LASER_WIDTH/2; y <= objectY + LASER_WIDTH/2; y++) {
+        for (int x = objectX; x <= objectX + LASER_LENGTH; x++) {
+            std::cout << LASER_SYMBOL;
+        }
+        std::cout << std::endl;
+    }
+}
+
+// Функция для очистки экрана
+void clearScreen() {
+    system("cls");
+}
+
+int main() {
+    while (true) {
+        clearScreen();
+        drawLaser();
+        std::cout << "Press Enter to exit..." << std::endl;
+        std::cin.get();
+    }
+    return 0;
+}
