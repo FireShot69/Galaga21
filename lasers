@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <conio.h>
 
 // Параметры лазера
 const int LASER_LENGTH = 20;
@@ -24,12 +25,36 @@ void clearScreen() {
     system("cls");
 }
 
+// Функция для обработки ввода
+void handleInput() {
+    if (_kbhit()) {
+        char key = _getch();
+        switch (key) {
+            case 'w':
+                objectY--;
+                break;
+            case 's':
+                objectY++;
+                break;
+            case 'a':
+                objectX--;
+                break;
+            case 'd':
+                objectX++;
+                break;
+        }
+    }
+}
+
 int main() {
     while (true) {
         clearScreen();
         drawLaser();
-        std::cout << "Press Enter to exit..." << std::endl;
-        std::cin.get();
+        handleInput();
+        std::cout << "Use WASD to move the object. Press Esc to exit." << std::endl;
+        if (_kbhit() && _getch() == 27) {
+            break;
+        }
     }
     return 0;
 }
