@@ -8,8 +8,6 @@
 #include <ctime>
 #include <conio.h>
 #include <exception>
-
-
 using namespace std;
 void move_cursor(int x, int y);
 void kinder(int x, int y);
@@ -35,20 +33,18 @@ void kinder(int x, int y)
     x = 0;
     y = 0;
 }
-
 struct bullet {
     int x;
     int y;
 };
-
 int main()
 {
     int vis = 50, shr = 45;
     int inp1 = 0, inp2 = 0;
     resize_console(vis - 1, shr);
     cout << "Controls:\n";
-    cout << "A - left\n";
-    cout << "D - right \n";
+    cout << "<- = left\n";
+    cout << "-> = right \n";
     for (int n = 0; n < (shr / 2 - 1) - 4; n++)
     {
         cout << "\n";
@@ -68,46 +64,62 @@ int main()
     }
 
     //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
 
-    int x = 20, y = 45;
-    int laserY = y - 1; // Начальная позиция лазера
+    bool y = 45.0;
+    int x = 20;
+    int laserX = x + 4; 
+    int laserY = y;
+    bool isLaserFired = false; 
+    int enemyX = 20;
+    int enemyY = 44;
+    bool isEnemyAlive = true;
+    bool isEnemyALL = true;
+    int enemycount = 5;
 
-    // Основной цикл
     while (true)
     {
-        // Очистка экрана
+
         system("cls");
+        
+        cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
 
-        // Отрисовка объекта
-        if (GetAsyncKeyState(VK_UP)) {
-            cout << string(y, '\n') << string(x, ' ') <<"|>-0-<|" << endl;
-        }
-        // Отрисовка лазера
-        cout << string(laserY, '\n') << string(x + 3, ' ') << "||" << endl;
-
-        // Механика лазера: движение вверх
-        if (laserY > 0)
+        if (GetAsyncKeyState(VK_LEFT) && x != 0)
+            x--;
+        if (GetAsyncKeyState(VK_RIGHT) && x != 43)
+            x++;
+        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
-            laserY--;
-        }
-        else
-        {
-            // Если лазер ушел за верхнюю границу, возвращаем его в начальное положение
+            laserX = x + 4;
             laserY = y - 1;
+            isLaserFired = true;
+        }
+        if (isLaserFired)
+        { 
+            cout << string(laserY, '\n') << string(laserX, ' ') << "^" << endl;
+            laserY++;
+            enemyY--; 
         }
 
-        // Обработка нажатий на стрелки
-        if (GetAsyncKeyState(VK_LEFT))
-            if (x != 0)
-                x--;
-        if (GetAsyncKeyState(VK_RIGHT))
-            if (x != 43)
-                x++;
+        if (laserY == 43) {
+            isEnemyAlive = false;
+            isLaserFired = false;
+        }
+  
+        if (isEnemyAlive && enemycount)
+        {
+            cout << string(enemyY, '\n') << string(enemyX, ' ') << "|-|" << endl;
+        }
+        
+       
+    
+        
 
-        // Задержка
-        Sleep(100);
 
+
+        Sleep(50);
     }
+
     return 0;
 }
