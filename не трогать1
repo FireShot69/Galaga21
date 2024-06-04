@@ -8,6 +8,8 @@
 #include <ctime>
 #include <conio.h>
 #include <exception>
+
+
 using namespace std;
 void move_cursor(int x, int y);
 void kinder(int x, int y);
@@ -33,18 +35,20 @@ void kinder(int x, int y)
     x = 0;
     y = 0;
 }
+
 struct bullet {
     int x;
     int y;
 };
+
 int main()
 {
     int vis = 50, shr = 45;
     int inp1 = 0, inp2 = 0;
     resize_console(vis - 1, shr);
     cout << "Controls:\n";
-    cout << "<- = left\n";
-    cout << "-> = right \n";
+    cout << "A - left\n";
+    cout << "D - right \n";
     for (int n = 0; n < (shr / 2 - 1) - 4; n++)
     {
         cout << "\n";
@@ -63,62 +67,91 @@ int main()
         }
     }
 
-    //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
-    ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
-
+    //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
+    ///////Начало игры///////////////////////////////2////////////////////////////24-25//////////////////////////////////////////////////////////////////
     bool y = 45.0;
     int x = 20;
+    bool BulletsY = 45.0;
+    int BulletsX = 19;
     int laserX = x + 4; 
     int laserY = y;
+    int MaxBullets = 10;
     bool isLaserFired = false; 
-    int enemyX = 20;
-    int enemyY = 44;
     bool isEnemyAlive = true;
     bool isEnemyALL = true;
-    int enemycount = 5;
+    int enemyY = 40;
+    int enemyX = 20;
+
 
     while (true)
     {
-
+       
         system("cls");
+
+
         
+       
+        cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY << endl;
+
+
+        cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
+       
         cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
+        
+
+
+
+        
+        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
+        {
+           
+            laserX = x + 4;
+            laserY = y - 1;
+            MaxBullets--;
+            if (MaxBullets == 0) {
+                while (MaxBullets <= 9) {
+                    MaxBullets++;
+                }
+
+            }
+            isLaserFired = true; 
+        }
 
         if (GetAsyncKeyState(VK_LEFT) && x != 0)
             x--;
         if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
-        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
-        {
-            laserX = x + 4;
-            laserY = y - 1;
-            isLaserFired = true;
-        }
+
+       
+        
         if (isLaserFired)
-        { 
+        {
             cout << string(laserY, '\n') << string(laserX, ' ') << "^" << endl;
             laserY++;
-            enemyY--; 
+            enemyY--;
+            if (laserX >= 50) {
+                enemyY = 40;
+                isLaserFired = false;
+            }
         }
 
-        if (laserY == 43) {
+        if (isEnemyAlive) {
+            cout << string(enemyY, '\n') << string(enemyX, ' ') << "|-0-|" << endl;
+        }
+
+        if (laserY == 40 || laserX == enemyX) {
             isEnemyAlive = false;
             isLaserFired = false;
+
         }
-  
-        if (isEnemyAlive && enemycount)
-        {
-            cout << string(enemyY, '\n') << string(enemyX, ' ') << "|-|" << endl;
-        }
-        
+
+        Sleep(1);
+
        
-    
+
         
 
 
-
-        Sleep(50);
     }
 
     return 0;
