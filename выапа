@@ -1,0 +1,43 @@
+struct enemyAircraft {
+    int x;
+    int y;
+    bool isAlive;
+    int laserX;
+    int laserY;
+    bool isLaserFired;
+};
+
+enemyAircraft enemyPlane;
+enemyPlane.x = 20;
+enemyPlane.y = 5;
+enemyPlane.isAlive = true;
+enemyPlane.laserX = 20;
+enemyPlane.laserY = 10;
+enemyPlane.isLaserFired = false;
+
+// Внутри игрового цикла
+// Логика стрельбы противников
+if (enemyPlane.isAlive) {
+    if (rand() % 100 < 5 && !enemyPlane.isLaserFired) {
+        enemyPlane.laserX = enemyPlane.x;
+        enemyPlane.laserY = enemyPlane.y + 1;
+        enemyPlane.isLaserFired = true;
+    }
+
+    if (enemyPlane.isLaserFired) {
+        cout << string(enemyPlane.laserY, '\n') << string(enemyPlane.laserX, ' ') << "v" << endl;
+        enemyPlane.laserY++;
+
+        // Проверка на столкновение с игроком
+        if (enemyPlane.laserX == x && enemyPlane.laserY == y) {
+            // Условие конца игры, когда игрок попадает лазером противника
+            cout << "Игра окончена. Вы были попаданы лазером противника." << endl;
+            break;
+        }
+    }
+}
+
+// Отображение противника-самолета
+if (enemyPlane.isAlive) {
+    cout << string(enemyPlane.y, '\n') << string(enemyPlane.x, ' ') << "<0>" << endl;
+}
