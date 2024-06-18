@@ -1,4 +1,3 @@
-
 #include <Windows.h>
 #include <iostream>
 #include <iomanip>
@@ -102,19 +101,23 @@ int main()
     int enemyX1 = 20;
     int enemyY2 = 40;
     int enemyX2 = 30;
+    bool isShipAlive = true;
     bool isEnemyAlive2 = true;
+    bool GAME = true;
 
-    while (true)
+    while (GAME)
     {
         system("cls");
         cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY << endl;
         cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
-        cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
-       if (GetAsyncKeyState(VK_UP) && !isLaserFired)
+        if (isShipAlive) {
+            cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
+        }
+        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
 
             laserX = x + 4;
-            laserY --;
+            laserY--;
             MaxBullets--;
             if (MaxBullets == 0) {
                 while (MaxBullets <= 9) {
@@ -127,10 +130,10 @@ int main()
 
         if (GetAsyncKeyState(VK_LEFT) && x != 0)
             x--;
-       if (GetAsyncKeyState(VK_RIGHT) && x != 43)
+        if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
 
-            
+
 
         if (isLaserFired)
         {
@@ -141,16 +144,20 @@ int main()
                 isLaserFired = false;
             }
         }
-            if (isEnemyAlive1) {
-                cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
-                enemyY1--;
-            }
+        if (isEnemyAlive1) {
+            cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
            
+        }
+        if (enemyY1 == y && enemyX1 == x) {
+            isEnemyAlive1 = false;
+            isShipAlive = false;
+            cout << "\t\tG a m e   o v e r";
 
-       if (laserY == enemyY1 && laserX == enemyX1) {
+        }else if (laserY == 40 || laserX == enemyX1) {
             isEnemyAlive1 = false;
             isLaserFired = false;
-
+            cout << "\n";
+            cout << "\t\t      W i n";
         }
         Sleep(10);
 
