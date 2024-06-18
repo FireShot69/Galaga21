@@ -8,7 +8,7 @@
 #include <ctime>
 #include <conio.h>
 #include <exception>
-
+#include <fstream>
 
 using namespace std;
 void move_cursor(int x, int y);
@@ -41,6 +41,26 @@ struct bullet {
     int y;
 };
 
+struct enemy_bullet {
+    int x;
+    int y;
+    bool active;
+};
+
+vector<enemy_bullet> enemy_bullets;
+
+void fire_enemy_bullet() {
+    if (rand() % 100 < 5) { // 5% шанс выстрела
+        int enemyY = 40;
+        int enemyX = 20;
+        enemy_bullet new_bullet;
+        new_bullet.x = enemyX + 3;
+        new_bullet.y = enemyY + 1;
+        new_bullet.active = true;
+        enemy_bullets.push_back(new_bullet);
+    }
+}
+
 int main()
 {
     int vis = 50, shr = 45;
@@ -56,9 +76,7 @@ int main()
     cout << setw(vis / 2 + 2) << "GALAGA\n";
     move_cursor((vis - 29) / 2, shr - 1);
     cout << "  PRESS -ENTER- TO START\n";
-
     bool new_game = false;
-
     while ((inp1 = _getch()) != 13)
     {
         if (inp1 == 224 && (inp2 = _getch()) == 72)
@@ -73,40 +91,29 @@ int main()
     int x = 20;
     bool BulletsY = 45.0;
     int BulletsX = 19;
-    int laserX = x + 4; 
+    int laserX = x + 4;
     int laserY = y;
     int MaxBullets = 10;
-    bool isLaserFired = false; 
-    bool isEnemyAlive = true;
+    bool isLaserFired = false;
+    bool isEnemyAlive1 = true;
     bool isEnemyALL = true;
-    int enemyY = 40;
-    int enemyX = 20;
-
+    int enemyY1 = 40;
+    int enemyX1 = 20;
+    int enemyY2 = 40;
+    int enemyX2 = 30;
+    bool isEnemyAlive2 = true;
 
     while (true)
     {
-       
         system("cls");
-
-
-        
-       
         cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY << endl;
-
-
         cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
-       
         cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
-        
-
-
-
-        
-        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
+       if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
-           
+
             laserX = x + 4;
-            laserY = y - 1;
+            laserY --;
             MaxBullets--;
             if (MaxBullets == 0) {
                 while (MaxBullets <= 9) {
@@ -114,45 +121,39 @@ int main()
                 }
 
             }
-            isLaserFired = true; 
+            isLaserFired = true;
         }
 
         if (GetAsyncKeyState(VK_LEFT) && x != 0)
             x--;
-        if (GetAsyncKeyState(VK_RIGHT) && x != 43)
+       if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
 
-       
-        
+            
+
         if (isLaserFired)
         {
             cout << string(laserY, '\n') << string(laserX, ' ') << "^" << endl;
             laserY++;
-            enemyY--;
+            enemyY1--;
             if (laserX >= 50) {
-                enemyY = 40;
                 isLaserFired = false;
             }
         }
+            if (isEnemyAlive1) {
+                cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
+                enemyY1--;
+            }
+           
 
-        if (isEnemyAlive) {
-            cout << string(enemyY, '\n') << string(enemyX, ' ') << "|-0-|" << endl;
-        }
-
-        if (laserY == 40 || laserX == enemyX) {
-            isEnemyAlive = false;
+       if (laserY == enemyY1 && laserX == enemyX1) {
+            isEnemyAlive1 = false;
             isLaserFired = false;
 
         }
-
-        Sleep(1);
-
-       
-
-        
+        Sleep(10);
 
 
     }
-
     return 0;
 }
