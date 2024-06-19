@@ -30,6 +30,12 @@ void move_cursor(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
+
+
+    
+
+
+
 void kinder(int x, int y)
 {
     x = 0;
@@ -91,24 +97,27 @@ int main()
     int x = 20;
     bool BulletsY = 45.0;
     int BulletsX = 19;
-    int laserX = x + 4;
-    int laserY = y;
+    int laserX1 = x + 4;
+    int laserY1 = y;
+    int laserX2 = x + 4;
+    int laserY2 = y;
     int MaxBullets = 10;
     bool isLaserFired = false;
+    bool isLaserFired2 = false;
     bool isEnemyAlive1 = true;
     bool isEnemyALL = true;
     int enemyY1 = 40;
     int enemyX1 = 20;
-    int enemyY2 = 40;
+    int enemyY2 = 30;
     int enemyX2 = 30;
     bool isShipAlive = true;
-    bool isEnemyAlive2 = true;
+    bool isEnemyAlive2 = false;
     bool GAME = true;
 
     while (GAME)
     {
         system("cls");
-        cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY << endl;
+        cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY1 << endl;
         cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
         if (isShipAlive) {
             cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
@@ -116,8 +125,8 @@ int main()
         if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
 
-            laserX = x + 4;
-            laserY--;
+            laserX1 = x + 4;
+            laserY1--;
             MaxBullets--;
             if (MaxBullets == 0) {
                 while (MaxBullets <= 9) {
@@ -137,29 +146,67 @@ int main()
 
         if (isLaserFired)
         {
-            cout << string(laserY, '\n') << string(laserX, ' ') << "^" << endl;
-            laserY++;
+            cout << string(laserY1, '\n') << string(laserX1, ' ') << "^" << endl;
+            laserY1++;
             enemyY1--;
-            if (laserX >= 50) {
+            if (laserX1 >= 50) {
                 isLaserFired = false;
             }
         }
+        if (isLaserFired2)
+        {
+            cout << string(laserY2, '\n') << string(laserX2, ' ') << "^" << endl;
+            laserY2++;
+            enemyY2--;
+            if (laserX2 >= 50) {
+                isLaserFired2 = false;
+            }
+        }
+       
+
         if (isEnemyAlive1) {
             cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
-           
         }
-        if (enemyY1 == y && enemyX1 == x) {
-            isEnemyAlive1 = false;
-            isShipAlive = false;
-            cout << "\t\tG a m e   o v e r";
 
-        }else if (laserY == 40 || laserX == enemyX1) {
-            isEnemyAlive1 = false;
-            isLaserFired = false;
-            cout << "\n";
-            cout << "\t\t      W i n";
+        if (laserY1 == 40 || laserX1 == enemyX1) {
+                isEnemyAlive1 = false;
+                isLaserFired = false;
+                isEnemyAlive2 = true;
         }
-        Sleep(10);
+
+
+
+
+        if (isEnemyAlive2) {
+            cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
+        }
+            
+        if (GetAsyncKeyState(VK_UP) && isLaserFired2==true)
+        {
+
+            laserX2 = x + 4;
+            laserY2--;
+            MaxBullets--;
+            if (MaxBullets == 0) {
+                while (MaxBullets <= 9) {
+                    MaxBullets++;
+                }
+
+            }
+            isLaserFired2 = false;
+        }
+
+
+        if (laserY2 == 30 || laserX2 == enemyX2) {
+                isEnemyAlive2 = false;
+                isLaserFired2 = false;
+            }
+
+
+
+
+
+            Sleep(10);
 
 
     }
