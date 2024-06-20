@@ -25,14 +25,14 @@ void resize_console(int vis, int shr)
 }
 void move_cursor(int x, int y)
 {
-    COORD coord;
+    COORD coord{};
     coord.X = x;
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 
-    
+
 
 
 
@@ -55,31 +55,32 @@ struct enemy_bullet {
 
 vector<enemy_bullet> enemy_bullets;
 
-void fire_enemy_bullet() {
-    if (rand() % 100 < 5) { // 5% шанс выстрела
-        int enemyY = 40;
-        int enemyX = 20;
-        enemy_bullet new_bullet;
-        new_bullet.x = enemyX + 3;
-        new_bullet.y = enemyY + 1;
-        new_bullet.active = true;
-        enemy_bullets.push_back(new_bullet);
-    }
+static void fire_enemy_bullet() {
+       if (rand() % 100 < 5) { // 5% шанс выстрела
+            int enemyY = 40;
+            int enemyX = 20;
+            enemy_bullet new_bullet;
+            new_bullet.x = enemyX + 3;
+            new_bullet.y = enemyY + 1;
+            new_bullet.active = true;
+            enemy_bullets.push_back(new_bullet);
+       }
 }
 
 int main()
 {
+   
     int vis = 50, shr = 45;
     int inp1 = 0, inp2 = 0;
     resize_console(vis - 1, shr);
     cout << "Controls:\n";
-    cout << "A - left\n";
-    cout << "D - right \n";
+    cout << "<- - left\n";
+    cout << "-> - right \n";
     for (int n = 0; n < (shr / 2 - 1) - 4; n++)
     {
         cout << "\n";
     }
-    cout << setw(vis / 2 + 2) << "GALAGA\n";
+    cout << setw(vis / 2 + 2) << "   GALAGA\n";
     move_cursor((vis - 29) / 2, shr - 1);
     cout << "  PRESS -ENTER- TO START\n";
     bool new_game = false;
@@ -91,9 +92,9 @@ int main()
         }
     }
 
-    //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
-    ///////Начало игры///////////////////////////////2////////////////////////////24-25//////////////////////////////////////////////////////////////////
-    bool y = 45.0;
+    //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////Начало игры/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   int y = 1;
     int x = 20;
     bool BulletsY = 45.0;
     int BulletsX = 19;
@@ -105,12 +106,10 @@ int main()
     bool isLaserFired = false;
     bool isLaserFired2 = false;
     bool isEnemyAlive1 = true;
-    bool isEnemyALL = true;
     int enemyY1 = 40;
     int enemyX1 = 20;
     int enemyY2 = 30;
-    int enemyX2 = 30;
-    bool isShipAlive = true;
+    int enemyX2 = 40;
     bool isEnemyAlive2 = false;
     bool GAME = true;
 
@@ -118,22 +117,11 @@ int main()
     {
         system("cls");
         cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY1 << endl;
-        cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
-        if (isShipAlive) {
-            cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
-        }
-        if (GetAsyncKeyState(VK_UP) && !isLaserFired)
+        cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
+        if (GetAsyncKeyState(VK_UP) && !isLaserFired && !isLaserFired2)
         {
-
             laserX1 = x + 4;
             laserY1--;
-            MaxBullets--;
-            if (MaxBullets == 0) {
-                while (MaxBullets <= 9) {
-                    MaxBullets++;
-                }
-
-            }
             isLaserFired = true;
         }
 
@@ -142,71 +130,72 @@ int main()
         if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
 
-
-
-        if (isLaserFired)
+        if (isLaserFired && !isLaserFired2)
         {
             cout << string(laserY1, '\n') << string(laserX1, ' ') << "^" << endl;
             laserY1++;
-            enemyY1--;
+            if (isEnemyAlive1) {
+                enemyY1--;
+            }
+            else {
+                enemyY2--;
+            }
+            
             if (laserX1 >= 50) {
                 isLaserFired = false;
             }
         }
-        if (isLaserFired2)
-        {
-            cout << string(laserY2, '\n') << string(laserX2, ' ') << "^" << endl;
-            laserY2++;
-            enemyY2--;
-            if (laserX2 >= 50) {
-                isLaserFired2 = false;
-            }
-        }
-       
-
         if (isEnemyAlive1) {
             cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
         }
 
-        if (laserY1 == 40 || laserX1 == enemyX1) {
-                isEnemyAlive1 = false;
-                isLaserFired = false;
-                isEnemyAlive2 = true;
+
+        if (laserY1 == 40 || laserX1 == enemyX1 && !isLaserFired2) {
+            isEnemyAlive1 = false;
+            isLaserFired = false;
+            isEnemyAlive2 = true;
+            isLaserFired2 == true;
+            laserX1 = x + 4;
+            laserY1 = y;
+            enemyY1 = 40;
         }
+        
+ //////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        if(!isEnemyAlive1 && isEnemyAlive2){
 
-
-        if (isEnemyAlive2) {
-            cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
-        }
-            
-        if (GetAsyncKeyState(VK_UP) && isLaserFired2==true)
-        {
-
-            laserX2 = x + 4;
-            laserY2--;
-            MaxBullets--;
-            if (MaxBullets == 0) {
-                while (MaxBullets <= 9) {
-                    MaxBullets++;
+            if (isLaserFired2) { 
+                cout << string(laserY2, '\n') << string(laserX2, ' ') << "^" << endl;
+                laserY2++;
+                if (laserY2 >= 50) {
+                    isLaserFired2 = false;
                 }
+            }
+
+            if (isEnemyAlive2) {
+
+                cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
 
             }
-            isLaserFired2 = false;
-        }
 
+            if (GetAsyncKeyState(VK_UP) && isLaserFired2)
+            {
+                laserX2 = x + 4;
+                laserY2--;
+                isLaserFired2 = true;
+            }
 
-        if (laserY2 == 30 || laserX2 == enemyX2) {
+            if (laserY2 < enemyY2 +1) {
                 isEnemyAlive2 = false;
                 isLaserFired2 = false;
             }
+        }
 
 
 
-
-
-            Sleep(10);
+        Sleep(10);
 
 
     }
