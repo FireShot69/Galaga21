@@ -8,7 +8,7 @@
 #include <ctime>
 #include <conio.h>
 #include <exception>
-
+#include <fstream>
 
 using namespace std;
 void move_cursor(int x, int y);
@@ -30,6 +30,12 @@ void move_cursor(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
+
+
+    
+
+
+
 void kinder(int x, int y)
 {
     x = 0;
@@ -40,6 +46,26 @@ struct bullet {
     int x;
     int y;
 };
+
+struct enemy_bullet {
+    int x;
+    int y;
+    bool active;
+};
+
+vector<enemy_bullet> enemy_bullets;
+
+void fire_enemy_bullet() {
+    if (rand() % 100 < 5) { // 5% шанс выстрела
+        int enemyY = 40;
+        int enemyX = 20;
+        enemy_bullet new_bullet;
+        new_bullet.x = enemyX + 3;
+        new_bullet.y = enemyY + 1;
+        new_bullet.active = true;
+        enemy_bullets.push_back(new_bullet);
+    }
+}
 
 int main()
 {
@@ -56,9 +82,7 @@ int main()
     cout << setw(vis / 2 + 2) << "GALAGA\n";
     move_cursor((vis - 29) / 2, shr - 1);
     cout << "  PRESS -ENTER- TO START\n";
-
     bool new_game = false;
-
     while ((inp1 = _getch()) != 13)
     {
         if (inp1 == 224 && (inp2 = _getch()) == 72)
@@ -67,48 +91,42 @@ int main()
         }
     }
 
-    //////Конец меню///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////Начало игры///////////////////////////////////////////////////////////24-25//////////////////////////////////////////////////////////////////
+    //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
+    ///////Начало игры///////////////////////////////2////////////////////////////24-25//////////////////////////////////////////////////////////////////
     bool y = 45.0;
     int x = 20;
     bool BulletsY = 45.0;
     int BulletsX = 19;
-    int laserX = x + 4; // Начальное положение лазера по оси X
-    int laserY = y;
+    int laserX1 = x + 4;
+    int laserY1 = y;
     int MaxBullets = 10;
-    bool isLaserFired = false; // Флаг, определяющий, выпущен ли уже лазер
-    bool isEnemyAlive = true;
+    bool isLaserFired = false;
+    bool isEnemyAlive1 = true;
     bool isEnemyALL = true;
-    int enemyY = 40;
-    int enemyX = 20;
-    
+    int enemyY1 = 40;
+    int enemyX1 = 20;
+    int enemyY2 = 30;
+    int enemyX2 = 30;
+    int enemyY3 = 40;
+    int enemyX3 = 40;
+    bool isShipAlive = true;
+    bool isEnemyAlive2 = false;
+    bool isEnemyAlive3 = false;
+    bool GAME = true;
 
-
-    while (true)
+    while (GAME)
     {
-        // Очистка экрана
         system("cls");
-
-        
-
-        // Обработка нажатий на стрелки
-        cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY << endl;
-        
-
-        cout << string(2, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
-
-        // Отрисовка объекта
-        cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
-
-
-
-
-        // Если нажата пробел и лазер еще не выпущен
+        cout << string(1, '\n') << string(0, ' ') << "lY: " << laserY1 << endl;
+        cout << string(3, '\n') << string(0, ' ') << "Bullets: " << MaxBullets << endl;
+        if (isShipAlive) {
+            cout << string(y, '\n') << string(x, ' ') << "|>-0-<|" << endl;
+        }
         if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
-            // Задаем начальные координаты лазера
-            laserX = x + 4;
-            laserY = y - 1;
+
+            laserX1 = x + 4;
+            laserY1--;
             MaxBullets--;
             if (MaxBullets == 0) {
                 while (MaxBullets <= 9) {
@@ -116,7 +134,7 @@ int main()
                 }
 
             }
-            isLaserFired = true; // Устанавливаем флаг "лазер выпущен"
+            isLaserFired = true;
         }
 
         if (GetAsyncKeyState(VK_LEFT) && x != 0)
@@ -124,34 +142,54 @@ int main()
         if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
 
-        // Если лазер уже выпущен
+
+
         if (isLaserFired)
         {
-            // Отрисовка лазера и его движение
-            cout << string(laserY, '\n') << string(laserX, ' ') << "^" << endl;
-            laserY++; // Лазер двигается вверх
-            enemyY--;// Если лазер достиг верхней границы экрана
-            if (laserX == enemyX) {
-                isLaserFired = false;
-
-            }
-            if (laserY >= 41) {
-                enemyY = 40;
-                isLaserFired = false; // Сбрасываем флаг "лазер выпущен"
-            }
-            if (laserX == 20 && laserY == enemyY) {
-                isEnemyAlive = false;
+            cout << string(laserY1, '\n') << string(laserX1, ' ') << "^" << endl;
+            laserY1++;
+            enemyY1--;
+            if (laserX1 >= 50) {
                 isLaserFired = false;
             }
         }
 
-        if (isEnemyAlive) {
-            cout << string(enemyY, '\n') << string(enemyX, ' ') << "0" << endl;
+        if (isEnemyAlive1) {
+            cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
         }
-        // Задержка
-        Sleep(50);
 
+        if (laserY1 == 40 || laserX1 == enemyX1) {
+                isEnemyAlive1 = false;
+                isLaserFired = false;
+                isEnemyAlive2 = true;
+                laserX1 = x + 4;
+                laserY1 = y;
+
+        }
+
+
+
+
+        if (isEnemyAlive2) {
+
+            cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
+            enemyY2--;
+            if (laserY1 == 30 || laserX1 == enemyX2) {
+                isLaserFired = false;
+                isEnemyAlive2 = false;
+
+
+            }
+
+        }
+
+    
     }
-        
+
+
+            Sleep(10);
+
+
+    
     return 0;
-}   
+}
