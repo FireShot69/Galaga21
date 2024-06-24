@@ -30,12 +30,6 @@ void move_cursor(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-
-
-    
-
-
-
 void kinder(int x, int y)
 {
     x = 0;
@@ -67,19 +61,22 @@ void fire_enemy_bullet() {
     }
 }
 
-int main()
-{
-    int vis = 50, shr = 45;
-    int inp1 = 0, inp2 = 0;
-    resize_console(vis - 1, shr);
+void MENU(int shr, int vis, int& inp1, int inp2) {
     cout << "Controls:\n";
-    cout << "A - left\n";
-    cout << "D - right \n";
+    cout << "<- - left\n";
+    cout << "-> - right \n";
     for (int n = 0; n < (shr / 2 - 1) - 4; n++)
     {
         cout << "\n";
     }
-    cout << setw(vis / 2 + 2) << "GALAGA\n";
+    cout << setw(vis / 2 + 2) <<"  XXXXXX   XXXX   X        XXXX   XXXXXX   XXXX  \n";
+    cout << setw(vis / 2 + 2) <<"  X    X  X    X  X       X    X  X    X  X    X \n";
+    cout << setw(vis / 2 + 2) <<"  X       X    X  X       X    X  X       X    X \n";
+    cout << setw(vis / 2 + 2) <<"  X   XX  XXXXXX  X       XXXXXX  X   XX  XXXXXX \n";
+    cout << setw(vis / 2 + 2) <<"  X    X  X    X  X       X    X  X    X  X    X \n";
+    cout << setw(vis / 2 + 2) <<"  XXXXXX  X    X  XXXXXX  X    X  XXXXXX  X    X \n";
+
+
     move_cursor((vis - 29) / 2, shr - 1);
     cout << "  PRESS -ENTER- TO START\n";
     bool new_game = false;
@@ -90,8 +87,9 @@ int main()
             new_game = true;
         }
     }
+}
 
-    //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
+void STARTGAME() {
     ///////Начало игры///////////////////////////////2////////////////////////////24-25//////////////////////////////////////////////////////////////////
     bool y = 45.0;
     int x = 20;
@@ -151,6 +149,8 @@ int main()
             enemyY1--;
             if (laserX1 >= 50) {
                 isLaserFired = false;
+                laserX1 = x + 4;
+                laserY1 = y;
             }
         }
 
@@ -159,37 +159,63 @@ int main()
         }
 
         if (laserY1 == 40 || laserX1 == enemyX1) {
-                isEnemyAlive1 = false;
-                isLaserFired = false;
-                isEnemyAlive2 = true;
-                laserX1 = x + 4;
-                laserY1 = y;
+            isEnemyAlive1 = false;
+            isLaserFired = false;
+            isEnemyAlive2 = true;
+            laserX1 = x + 4;
+            laserY1 = y;
 
         }
 
-
-
-
-        if (isEnemyAlive2) {
-
+        if (isEnemyAlive2 && enemyY2 > 0) {
             cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
             enemyY2--;
-            if (laserY1 == 30 || laserX1 == enemyX2) {
+            if (enemyY2 <= 0) {
+                        GAME = false;
+                    }
+            if (laserY1 == enemyY2 || laserX1 == enemyX2) {
                 isLaserFired = false;
                 isEnemyAlive2 = false;
-
+                laserY1 = y;
 
             }
 
         }
+        
 
-    
     }
+}
 
-
-            Sleep(10);
-
-
+int main()
+{
+    int vis = 50, shr = 45;
+    int inp1 = 0, inp2 = 0;
+    resize_console(vis - 1, shr);
     
+    MENU(shr, vis, inp1, inp2);
+
+    //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
+    
+    STARTGAME();
+    Sleep(100);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return 0;
 }
