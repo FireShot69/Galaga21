@@ -9,7 +9,6 @@
 #include <conio.h>
 #include <exception>
 #include <fstream>
-
 using namespace std;
 void move_cursor(int x, int y);
 void kinder(int x, int y);
@@ -30,37 +29,10 @@ void move_cursor(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-void kinder(int x, int y)
-{
-    x = 0;
-    y = 0;
-}
-
 struct bullet {
     int x;
     int y;
 };
-
-struct enemy_bullet {
-    int x;
-    int y;
-    bool active;
-};
-
-vector<enemy_bullet> enemy_bullets;
-
-void fire_enemy_bullet() {
-    if (rand() % 100 < 5) { // 5% шанс выстрела
-        int enemyY = 40;
-        int enemyX = 20;
-        enemy_bullet new_bullet;
-        new_bullet.x = enemyX + 3;
-        new_bullet.y = enemyY + 1;
-        new_bullet.active = true;
-        enemy_bullets.push_back(new_bullet);
-    }
-}
-
 void MENU(int shr, int vis, int& inp1, int inp2) {
     cout << "Controls:\n";
     cout << "<- - left\n";
@@ -69,14 +41,12 @@ void MENU(int shr, int vis, int& inp1, int inp2) {
     {
         cout << "\n";
     }
-    cout << setw(vis / 2 + 2) <<"  XXXXXX   XXXX   X        XXXX   XXXXXX   XXXX  \n";
-    cout << setw(vis / 2 + 2) <<"  X    X  X    X  X       X    X  X    X  X    X \n";
-    cout << setw(vis / 2 + 2) <<"  X       X    X  X       X    X  X       X    X \n";
-    cout << setw(vis / 2 + 2) <<"  X   XX  XXXXXX  X       XXXXXX  X   XX  XXXXXX \n";
-    cout << setw(vis / 2 + 2) <<"  X    X  X    X  X       X    X  X    X  X    X \n";
-    cout << setw(vis / 2 + 2) <<"  XXXXXX  X    X  XXXXXX  X    X  XXXXXX  X    X \n";
-
-
+    cout << setw(vis / 2 + 2) << "  XXXXXX   XXXX   X        XXXX   XXXXXX   XXXX  \n";
+    cout << setw(vis / 2 + 2) << "  X    X  X    X  X       X    X  X    X  X    X \n";
+    cout << setw(vis / 2 + 2) << "  X       X    X  X       X    X  X       X    X \n";
+    cout << setw(vis / 2 + 2) << "  X   XX  XXXXXX  X       XXXXXX  X   XX  XXXXXX \n";
+    cout << setw(vis / 2 + 2) << "  X    X  X    X  X       X    X  X    X  X    X \n";
+    cout << setw(vis / 2 + 2) << "  XXXXXX  X    X  XXXXXX  X    X  XXXXXX  X    X \n";
     move_cursor((vis - 29) / 2, shr - 1);
     cout << "  PRESS -ENTER- TO START\n";
     bool new_game = false;
@@ -88,7 +58,38 @@ void MENU(int shr, int vis, int& inp1, int inp2) {
         }
     }
 }
-
+void RESTART(int shr, int vis, int& inp1, int inp2) {
+    system("cls");
+    MENU(shr, vis, inp1, inp2);
+}
+void WIN(bool& GAME, int shr, int vis, int& inp1, int inp2) {
+    system("cls");
+    int answer;
+    cout << setw(50 / 2 + 2) << "\nW I N\n";
+    cout << setw(50 / 2 + 2) << "\nR E S T A R T?\n";
+    cout << 1 << "-NO";
+    cout << setw(50 / 2 + 2) << 2 << "-YES\n";
+    cin >> answer;
+    if (answer == 1){
+        GAME = false;
+    }else if (answer == 2) {
+        RESTART(shr, vis, inp1, inp2);
+    }
+}
+void LOST(bool &GAME, int shr, int vis, int& inp1, int inp2) {
+    system("cls");
+    int answer;
+    cout << setw(50 / 2 + 2) << "\nL O S T\n";
+    cout << setw(50 / 2 + 2) << "\nR E S T A R T?\n";
+    cout << 1 << "-NO";
+    cout << setw(50 / 2 + 2) << 2 << "-YES\n";
+    cin >> answer;
+    if(answer == 1) {
+        GAME = false;
+    }else if (answer == 2) {
+        RESTART(shr, vis, inp1, inp2);
+    }
+}
 void STARTGAME() {
     ///////Начало игры///////////////////////////////2////////////////////////////24-25//////////////////////////////////////////////////////////////////
     bool y = 45.0;
@@ -111,7 +112,6 @@ void STARTGAME() {
     bool isEnemyAlive2 = false;
     bool isEnemyAlive3 = false;
     bool GAME = true;
-
     while (GAME)
     {
         system("cls");
@@ -122,7 +122,6 @@ void STARTGAME() {
         }
         if (GetAsyncKeyState(VK_UP) && !isLaserFired)
         {
-
             laserX1 = x + 4;
             laserY1--;
             MaxBullets--;
@@ -130,18 +129,13 @@ void STARTGAME() {
                 while (MaxBullets <= 9) {
                     MaxBullets++;
                 }
-
             }
             isLaserFired = true;
         }
-
         if (GetAsyncKeyState(VK_LEFT) && x != 0)
             x--;
         if (GetAsyncKeyState(VK_RIGHT) && x != 43)
             x++;
-
-
-
         if (isLaserFired)
         {
             cout << string(laserY1, '\n') << string(laserX1, ' ') << "^" << endl;
@@ -153,69 +147,50 @@ void STARTGAME() {
                 laserY1 = y;
             }
         }
-
         if (isEnemyAlive1) {
             cout << string(enemyY1, '\n') << string(enemyX1, ' ') << "|-0-|" << endl;
         }
-
         if (laserY1 == 40 || laserX1 == enemyX1) {
             isEnemyAlive1 = false;
             isLaserFired = false;
             isEnemyAlive2 = true;
             laserX1 = x + 4;
             laserY1 = y;
-
         }
-
         if (isEnemyAlive2 && enemyY2 > 0) {
             cout << string(enemyY2, '\n') << string(enemyX2, ' ') << "|-0-|" << endl;
             enemyY2--;
-            if (enemyY2 <= 0) {
-                        GAME = false;
-                    }
+            if (enemyY2 == y) {
+                int vis = 50, shr = 45;
+                int inp1 = 0, inp2 = 0;
+                LOST(GAME, shr, vis, inp1, inp2);
+                if (GAME) {
+                    STARTGAME();
+                }
+                break;
+            }
             if (laserY1 == enemyY2 || laserX1 == enemyX2) {
                 isLaserFired = false;
                 isEnemyAlive2 = false;
                 laserY1 = y;
-
+                int vis = 50, shr = 45;
+                int inp1 = 0, inp2 = 0;
+                WIN(GAME, shr, vis,  inp1, inp2);
+                if (GAME) {
+                    STARTGAME();
+                }
             }
-
         }
-        
-
     }
 }
-
 int main()
 {
     int vis = 50, shr = 45;
     int inp1 = 0, inp2 = 0;
     resize_console(vis - 1, shr);
-    
     MENU(shr, vis, inp1, inp2);
-
     //////Конец меню//////////////////////////////////6/////////////////////////////////////////////////////////////////////////////////////////////
-    
     STARTGAME();
     Sleep(100);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return 0;
 }
